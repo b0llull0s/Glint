@@ -1,0 +1,29 @@
+#!/bin/bash
+nmap_scan()
+{
+    nmap $DOMAIN > $DIRECTORY/nmap
+    echo "The results of nmap scan are stored in $DIRECTORY/nmap"
+}
+dirsearch_scan()
+{
+    $PATH_TO_DIRSEARCH/dirsearch.py -u $DOMAIN -e php --simple-report=$DIRECTORY/dirsearch
+    echo "The results of dirsearch scan are stored in $DIRECTORY/dirsearch."
+}
+crt_scan()
+{
+    curl "https://crt.sh/?q=$DOMAIN&output=json" -o $DIRECTORY/crt
+    echo "The results of cert parsing is stored in $DIRECTORY/crt"
+}
+feroxbuster_scan()
+{
+    feroxbuster $DOMAIN > $DIRECTORY/feroxbuster
+    echo "Feroxbuster logs ready --> $DIRECTORY/feroxbuster"
+}
+ffuf_scan()
+{
+    ffuf -w wordlist.txt:FUZZ -u $DOMAIN/FUZZ
+    ffuf -w subdomains-top1million-5000.txt:FUZZ -u FUZZ.$DOMAIN > $DIRECTORY/ffuf_domains
+
+}
+# gobuster
+# wfuzz
